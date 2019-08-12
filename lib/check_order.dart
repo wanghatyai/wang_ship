@@ -219,20 +219,23 @@ class _CheckOrderPageState extends State<CheckOrderPage> {
                       ),
                     ),
                     Expanded(
-                        child: TextField (
-                          controller: barcodeProduct,
-                          onChanged: onSearch,
-                          style: TextStyle (
-                            fontSize: 18,
-                            color: Colors.black,
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                          child: TextField (
+                            controller: barcodeProduct,
+                            onChanged: onSearch,
+                            style: TextStyle (
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                            decoration: InputDecoration (
+                                labelText: 'Code ลูกค้า',
+                                labelStyle: TextStyle (
+                                  fontSize: (15),
+                                )
+                            ),
+                            keyboardType: TextInputType.number,
                           ),
-                          decoration: InputDecoration (
-                              labelText: 'Code ลูกค้า',
-                              labelStyle: TextStyle (
-                                fontSize: (15),
-                              )
-                          ),
-                          keyboardType: TextInputType.number,
                         ),
                     ),
                   ],
