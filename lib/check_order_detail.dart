@@ -4,6 +4,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 
 import 'package:wang_ship/image_detail.dart';
+import 'package:wang_ship/customer_sign.dart';
+
+import 'package:http/http.dart' as http;
 
 class CheckOrderDetailPage extends StatefulWidget {
 
@@ -65,6 +68,70 @@ class _CheckOrderDetailPageState extends State<CheckOrderDetailPage> {
     }
   }
 
+  getTypeCustomerReceive(int e){
+    setState(() {
+      if(e == 1){
+        typeCustomerGet = 1;
+      } else if (e == 2) {
+        typeCustomerGet = 2;
+      } else if (e == 3) {
+        typeCustomerGet = 3;
+      } else if (e == 4) {
+        typeCustomerGet = 4;
+      }
+    });
+  }
+
+  _signCustomer(val, e){
+
+    img.Image preImageFile1 = img.decodeImage(imageFile1.readAsBytesSync());
+    img.Image resizeImage1 = img.copyResize(preImageFile1, width: 800);
+
+    File resizeImageFile1 = File(imageFile1.path)
+      ..writeAsBytesSync(img.encodeJpg(resizeImage1, quality: 90));
+
+    /*var stream1 = http.ByteStream(
+        DelegatingStream.typed(resizeImageFile1.openRead()));
+    var imgLength1 = await resizeImageFile1.length();
+    var multipartFile1 = http.MultipartFile("runFile2", stream1, imgLength1,
+        filename: path.basename("resizeImageFile1.jpg"));*/
+
+    img.Image preImageFile2 = img.decodeImage(imageFile2.readAsBytesSync());
+    img.Image resizeImage2 = img.copyResize(preImageFile2, width: 800);
+
+    File resizeImageFile2 = File(imageFile2.path)
+      ..writeAsBytesSync(img.encodeJpg(resizeImage2, quality: 90));
+
+    /*var stream2 = http.ByteStream(
+        DelegatingStream.typed(resizeImageFile2.openRead()));
+    var imgLength2 = await resizeImageFile2.length();
+    var multipartFile2 = http.MultipartFile("runFile2ex", stream2, imgLength2,
+        filename: path.basename("resizeImageFile2.jpg"));*/
+
+    img.Image preImageFile3 = img.decodeImage(imageFile3.readAsBytesSync());
+    img.Image resizeImage3 = img.copyResize(preImageFile3, width: 800);
+
+    File resizeImageFile3 = File(imageFile3.path)
+      ..writeAsBytesSync(img.encodeJpg(resizeImage3, quality: 90));
+
+    /*var stream3 = http.ByteStream(
+        DelegatingStream.typed(resizeImageFile3.openRead()));
+    var imgLength3 = await resizeImageFile3.length();
+    var multipartFile3 = http.MultipartFile(
+        "runFile2priceTag", stream3, imgLength3,
+        filename: path.basename("resizeImageFile3.jpg"));*/
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CustomerSignPage(
+            billOrderShip: val,
+            typeCustomerGet: e,
+            filePic1: resizeImageFile1,
+            filePic2: resizeImageFile2,
+            filePic3: resizeImageFile3
+        )));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,26 +142,41 @@ class _CheckOrderDetailPageState extends State<CheckOrderDetailPage> {
       body: Container(
         child: Column(
           children: <Widget>[
-            Text('ร้าน: ${widget.billOrderShipVal.shipBillCusName}'),
-            Text('รหัสรายการCom'),
+            Text('ร้าน: ${widget.billOrderShipVal.shipBillCusName}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 2, 20, 2),
+              width: double.infinity,
+              color: Colors.blueGrey,
+              child: Text('รหัส Com', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('${widget.billOrderShipVal.shipBillCodeCom1}'),
-                Text('${widget.billOrderShipVal.shipBillCodeCom2}'),
-                Text('${widget.billOrderShipVal.shipBillCodeCom3}'),
+                Text('${widget.billOrderShipVal.shipBillCodeCom1}', style: TextStyle(fontSize: 16,)),
+                Text('${widget.billOrderShipVal.shipBillCodeCom2}', style: TextStyle(fontSize: 16,)),
+                Text('${widget.billOrderShipVal.shipBillCodeCom3}', style: TextStyle(fontSize: 16,)),
               ],
             ),
-            Text('รหัสรายการPart'),
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 2, 20, 2),
+              width: double.infinity,
+              color: Colors.blueGrey,
+              child: Text('รหัส Part', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('${widget.billOrderShipVal.shipBillCode1}'),
-                Text('${widget.billOrderShipVal.shipBillCode2}'),
-                Text('${widget.billOrderShipVal.shipBillCode3}'),
+                Text('${widget.billOrderShipVal.shipBillCode1}', style: TextStyle(fontSize: 16,)),
+                Text('${widget.billOrderShipVal.shipBillCode2}', style: TextStyle(fontSize: 16,)),
+                Text('${widget.billOrderShipVal.shipBillCode3}', style: TextStyle(fontSize: 16,)),
               ],
             ),
-            Text('พิมพ์สติ๊กเกอร์ : ${widget.billOrderShipVal.shipBillDateCreate}'),
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 2, 20, 2),
+              width: double.infinity,
+              color: Colors.blue,
+              child: Text('พิมพ์สติ๊กเกอร์ : ${widget.billOrderShipVal.shipBillDateCreate}', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),),
+            ),
             Row(
               children: <Widget>[
                 Expanded(
@@ -150,54 +232,74 @@ class _CheckOrderDetailPageState extends State<CheckOrderDetailPage> {
                 ),
               ],
             ),
-            Text('ผู้รับสินค้า'),
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+              width: double.infinity,
+              color: Colors.deepOrange,
+              child: Text('ผู้รับสินค้า', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),),
+            ),
             Row(
               children: <Widget>[
-                Text('เจ้าของร้าน'),
-                Radio(
-                  onChanged:(e){},
-                  activeColor: Colors.deepOrange,
-                  value: 1,
-                  groupValue: typeCustomerGet,
+                Expanded(
+                  child: RadioListTile(
+                    title: Text('เจ้าของร้าน'),
+                    onChanged:(int e) => getTypeCustomerReceive(e),
+                    activeColor: Colors.deepOrange,
+                    value: 1,
+                    groupValue: typeCustomerGet,
+                  ),
                 ),
-                Text('เภสัชกร'),
-                Radio(
-                  onChanged:(e){},
-                  activeColor: Colors.deepOrange,
-                  value: 2,
-                  groupValue: typeCustomerGet,
+                Expanded(
+                  child: RadioListTile(
+                    title: Text('เภสัชกร'),
+                    onChanged:(int e) => getTypeCustomerReceive(e),
+                    activeColor: Colors.deepOrange,
+                    value: 2,
+                    groupValue: typeCustomerGet,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: RadioListTile(
+                    title: Text('ผู้จัดการ'),
+                    onChanged:(int e) => getTypeCustomerReceive(e),
+                    activeColor: Colors.deepOrange,
+                    value: 3,
+                    groupValue: typeCustomerGet,
+                  ),
+                ),
+                Expanded(
+                  child: RadioListTile(
+                    title: Text('ฝากข้างร้าน'),
+                    onChanged:(int e) => getTypeCustomerReceive(e),
+                    activeColor: Colors.deepOrange,
+                    value: 4,
+                    groupValue: typeCustomerGet,
+                  ),
                 )
               ],
             ),
-            Row(
-              children: <Widget>[
-                Text('ผู้จัดการ'),
-                Radio(
-                  onChanged:(e){},
-                  activeColor: Colors.deepOrange,
-                  value: 3,
-                  groupValue: typeCustomerGet,
-                ),
-                Text('ฝากข้างร้าน'),
-                Radio(
-                  onChanged:(e){},
-                  activeColor: Colors.deepOrange,
-                  value: 4,
-                  groupValue: typeCustomerGet,
-                ),
-              ],
-            ),
-            RaisedButton (
-              color: Colors.green,
-              onPressed: (){
-
-              },
-              child: Text (
-                'ลายเช็น',
-                style: TextStyle (
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: RaisedButton (
+                  color: Colors.green,
+                  onPressed: (){
+                    _signCustomer(widget.billOrderShipVal, typeCustomerGet);
+                  },
+                  child: Text (
+                    'ลายเช็น',
+                    style: TextStyle (
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -207,4 +309,3 @@ class _CheckOrderDetailPageState extends State<CheckOrderDetailPage> {
     );
   }
 }
-
