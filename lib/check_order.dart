@@ -5,12 +5,13 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:barcode_scan/barcode_scan.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:wang_ship/bill_model.dart';
 import 'package:wang_ship/customer_sign.dart';
 
 import 'package:wang_ship/check_order_detail.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class CheckOrderPage extends StatefulWidget {
@@ -19,6 +20,10 @@ class CheckOrderPage extends StatefulWidget {
 }
 
 class _CheckOrderPageState extends State<CheckOrderPage> {
+
+  TextEditingController barcodeProduct = TextEditingController();
+
+  List<Bill> _search = [];
 
   String barcode;
 
@@ -38,6 +43,8 @@ class _CheckOrderPageState extends State<CheckOrderPage> {
     _billShip.clear();
 
     final res = await http.get('http://wangpharma.com/API/shippingProduct.php?SearchVal=$searchVal&username=$username&act=Search');
+
+    print('http://wangpharma.com/API/shippingProduct.php?SearchVal=$searchVal&username=$username&act=Search');
 
     if(res.statusCode == 200){
 
@@ -131,7 +138,7 @@ class _CheckOrderPageState extends State<CheckOrderPage> {
             return ListTile(
               contentPadding: EdgeInsets.fromLTRB(10, 1, 10, 1),
               onTap: (){
-                _signCustomer(a);
+                getOrderBillDetail(a);
               },
               leading: Text('${a.shipBillQty} ลัง', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
               title: Text('[${a.shipBillCusCode}] ${a.shipBillCusName}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
@@ -142,7 +149,7 @@ class _CheckOrderPageState extends State<CheckOrderPage> {
                 ],
               ),
               trailing: IconButton(
-                  icon: Icon(Icons.local_shipping, size: 40, color: Colors.deepOrange),
+                  icon: Icon(Icons.local_shipping, size: 40, color: Colors.lightBlue),
                   onPressed: (){
                     getOrderBillDetail(a);
                     //addToOrderFast(productAll[index]);
@@ -155,11 +162,11 @@ class _CheckOrderPageState extends State<CheckOrderPage> {
     }
   }
 
-  _signCustomer(val){
+  /*_signCustomer(val){
     Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => CustomerSignPage(billOrderShip: val)));
-  }
+  }*/
 
   getOrderBillDetail(val){
     Navigator.push(
@@ -172,6 +179,22 @@ class _CheckOrderPageState extends State<CheckOrderPage> {
     super.initState();
   }
 
+  onSearch(String text) async{
+    _search.clear();
+    if(text.isEmpty){
+      setState(() {});
+      return;
+    }
+
+    searchBill(text);
+
+    _billShip.forEach((f){
+      if(f.shipBillCusCode.contains(text)) _search.add(f);
+    });
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -181,13 +204,45 @@ class _CheckOrderPageState extends State<CheckOrderPage> {
             children: <Widget>[
               Padding (
                 padding: const EdgeInsets.all(20),
-                child: SizedBox (
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Container(
+                      //padding: EdgeInsets.fromLTRB(10, 10, 0, 0),
+                      child: IconButton(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          icon: Icon(Icons.settings_overscan, size: 50, color: Colors.red,),
+                          onPressed: (){
+                            scanBarcode();
+                            //Navigator.push(context, MaterialPageRoute(builder: (context) => OrderPage()));
+                          }
+                      ),
+                    ),
+                    Expanded(
+                        child: TextField (
+                          controller: barcodeProduct,
+                          onChanged: onSearch,
+                          style: TextStyle (
+                            fontSize: 18,
+                            color: Colors.black,
+                          ),
+                          decoration: InputDecoration (
+                              labelText: 'Code ลูกค้า',
+                              labelStyle: TextStyle (
+                                fontSize: (15),
+                              )
+                          ),
+                          keyboardType: TextInputType.number,
+                        ),
+                    ),
+                  ],
+                ),
+                /*child: SizedBox (
                   width: double.infinity,
                   height: 56,
                   child: RaisedButton (
                     color: Colors.green,
-                    //onPressed: scanBarcode,
-                    onPressed: getOrderBillDetail(context),
+                    onPressed: scanBarcode,
                     child: Text (
                       'Scan',
                       style: TextStyle (
@@ -197,7 +252,7 @@ class _CheckOrderPageState extends State<CheckOrderPage> {
                       ),
                     ),
                   ),
-                ),
+                ),*/
               ),
               /*Padding (
               padding: const EdgeInsets.all(20),
