@@ -42,9 +42,9 @@ class _CheckOrderPageState extends State<CheckOrderPage> {
     });
     _billShip.clear();
 
-    final res = await http.get('http://wangpharma.com/API/shippingProduct.php?SearchVal=$searchVal&username=$username&act=Search');
+    final res = await http.get('https://wangpharma.com/API/shippingProduct.php?SearchVal=$searchVal&username=$username&act=Search');
 
-    print('http://wangpharma.com/API/shippingProduct.php?SearchVal=$searchVal&username=$username&act=Search');
+    //print('http://wangpharma.com/API/shippingProduct.php?SearchVal=$searchVal&username=$username&act=Search');
 
     if(res.statusCode == 200){
 
@@ -219,24 +219,24 @@ class _CheckOrderPageState extends State<CheckOrderPage> {
                       ),
                     ),
                     Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                          child: TextField (
-                            controller: barcodeProduct,
-                            onChanged: onSearch,
-                            style: TextStyle (
-                              fontSize: 18,
-                              color: Colors.black,
-                            ),
-                            decoration: InputDecoration (
-                                labelText: 'Code ลูกค้า',
-                                labelStyle: TextStyle (
-                                  fontSize: (15),
-                                )
-                            ),
-                            keyboardType: TextInputType.number,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        child: TextField (
+                          controller: barcodeProduct,
+                          onChanged: onSearch,
+                          style: TextStyle (
+                            fontSize: 18,
+                            color: Colors.black,
                           ),
+                          decoration: InputDecoration (
+                              labelText: 'Code ลูกค้า',
+                              labelStyle: TextStyle (
+                                fontSize: (15),
+                              )
+                          ),
+                          keyboardType: TextInputType.number,
                         ),
+                      ),
                     ),
                   ],
                 ),
