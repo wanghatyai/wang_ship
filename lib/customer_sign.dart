@@ -15,6 +15,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:fluttertoast/fluttertoast.dart';
+//import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
@@ -43,6 +45,10 @@ class CustomerSignPage extends StatefulWidget {
 
 class _CustomerSignPageState extends State<CustomerSignPage> {
 
+  var currentLocation;
+
+  //GoogleMapController mapController;
+
   GlobalKey<SignatureState> signatureKey = GlobalKey();
   var image;
   String username;
@@ -52,6 +58,14 @@ class _CustomerSignPageState extends State<CustomerSignPage> {
   @override
   void initState() {
     super.initState();
+    Geolocator().getCurrentPosition().then((currloc){
+      setState(() {
+        currentLocation = currloc;
+        print('${currentLocation.latitude} -9999999-  ${currentLocation.longitude}');
+        //mapToggle = true;
+        //addMarkerShip();
+      });
+    });
   }
 
   showToastAddFast(){
@@ -80,9 +94,12 @@ class _CustomerSignPageState extends State<CustomerSignPage> {
             signatureKey.currentState.clearPoints();
           },
         ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(120, 0, 120, 0),
+        Container(
+          width: 230,
+          child: Text("${widget.billOrderShip.shipBillCusName} : ${widget.billOrderShip.shipBillQty} ลัง",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
         ),
+
         FlatButton(
           child: Text('บันทึก', style: TextStyle(fontSize: 20, color: Colors.green, fontWeight: FontWeight.bold), ),
           onPressed: () {
@@ -116,7 +133,7 @@ class _CustomerSignPageState extends State<CustomerSignPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     username = prefs.getString("empCodeShipping");
 
-    var uri = Uri.parse("http://wangpharma.com/API/addShippingProduct.php");
+    var uri = Uri.parse("https://wangpharma.com/API/addShippingProduct.php");
     var request = http.MultipartRequest("POST", uri);
 
     var pngBytes = await image.toByteData(format: ui.ImageByteFormat.png);
@@ -166,6 +183,8 @@ class _CustomerSignPageState extends State<CustomerSignPage> {
     request.fields['sIdCus'] = widget.billOrderShip.shipBillCusID;
     request.fields['sWhoShip'] = username;
     request.fields['sCusReceiveType'] = widget.typeCustomerGet.toString();
+    request.fields['cusLatitude'] = currentLocation.latitude;
+    request.fields['cusLongitude'] = currentLocation.longitude;
 
     print(multipartFileS.field);
     print(multipartFile1.field);
