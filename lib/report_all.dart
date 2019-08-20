@@ -23,12 +23,14 @@ class _ReportAllPageState extends State<ReportAllPage> {
   String act = "GetShipAll";
   String username;
 
+  List shipType = ['_','บริการส่ง','ฝากรถ','รับเองที่คลัง','รับเองที่หจก','พร้อมรถ'];
+
   getShipBill() async{
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     username = prefs.getString("empCodeShipping");
 
-    final res = await http.get('http://wangpharma.com/API/shippingProduct.php?PerPage=$perPage&act=$act');
+    final res = await http.get('https://wangpharma.com/API/shippingProduct.php?PerPage=$perPage&act=$act');
 
     if(res.statusCode == 200){
 
@@ -94,11 +96,12 @@ class _ReportAllPageState extends State<ReportAllPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text('พิมพ์สติ๊กเกอร์ : ${orderBillAll[index].shipBillDateCreate}', style: TextStyle(color: Colors.pink),),
-                Text('ที่อยู่ : ${orderBillAll[index].shipBillCusAddress}', style: TextStyle(color: Colors.teal),),
+                Text('ที่อยู่ : ${orderBillAll[index].shipBillCusAddress}', style: TextStyle(color: Colors.teal), overflow: TextOverflow.ellipsis),
+                Text('รูปแบบการส่ง : ${shipType[int.parse(orderBillAll[index].shipBillShipType)]}', style: TextStyle(color: Colors.purple)),
               ],
             ),
             trailing: IconButton(
-                icon: Icon(Icons.local_shipping, size: 40, color: Colors.lightBlue,),
+                icon: Icon(Icons.local_shipping, size: 40, color: Colors.red,),
                 onPressed: (){
                   //addToOrderFast(productAll[index]);
                 }
