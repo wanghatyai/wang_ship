@@ -28,8 +28,8 @@ class CustomerSignPage extends StatefulWidget {
   var typeCustomerGet;
   var latitudeVal;
   var longitudeVal;
-  File filePic1;
-  File filePic2;
+  var filePic1;
+  var filePic2;
   //File filePic3;
 
   CustomerSignPage({Key key,
@@ -158,7 +158,7 @@ class _CustomerSignPageState extends State<CustomerSignPage> {
     var multipartFileS = http.MultipartFile("cusSign", streamS, imgLengthS,
         filename: pathh.basename("cusSign.png"));
 
-    var stream1 = http.ByteStream(
+    /*var stream1 = http.ByteStream(
         DelegatingStream.typed(widget.filePic1.openRead()));
     var imgLength1 = await widget.filePic1.length();
     var multipartFile1 = http.MultipartFile("sBoxPic", stream1, imgLength1,
@@ -168,7 +168,7 @@ class _CustomerSignPageState extends State<CustomerSignPage> {
         DelegatingStream.typed(widget.filePic2.openRead()));
     var imgLength2 = await widget.filePic2.length();
     var multipartFile2 = http.MultipartFile("sStorePic", stream2, imgLength2,
-        filename: pathh.basename("resizeImageFile2.jpg"));
+        filename: pathh.basename("resizeImageFile2.jpg"));*/
 
     /*var stream3 = http.ByteStream(
         DelegatingStream.typed(widget.filePic3.openRead()));
@@ -178,9 +178,12 @@ class _CustomerSignPageState extends State<CustomerSignPage> {
 
     request.files.add(multipartFileS);
 
-    request.files.add(multipartFile1);
-    request.files.add(multipartFile2);
+    //request.files.add(multipartFile1);
+    //request.files.add(multipartFile2);
     //request.files.add(multipartFile3);
+
+    request.fields['sBoxPic'] = widget.filePic1;
+    request.fields['sStorePic'] = widget.filePic2;
 
     request.fields['sIdCus'] = widget.billOrderShip.shipBillCusID;
     request.fields['sWhoShip'] = username;
@@ -189,7 +192,7 @@ class _CustomerSignPageState extends State<CustomerSignPage> {
     request.fields['cusLongitude'] = widget.longitudeVal.toString();
 
     print(multipartFileS.field);
-    print(multipartFile1.field);
+    //print(multipartFile1.field);
     print(request.fields);
     print(widget.latitudeVal.toString());
     print(widget.longitudeVal.toString());
