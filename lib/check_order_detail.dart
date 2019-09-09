@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 
@@ -25,6 +26,9 @@ class _CheckOrderDetailPageState extends State<CheckOrderDetailPage> {
   File imageFile2;
   //File imageFile3;
 
+  List<int> imageBytes1;
+  List<int> imageBytes2;
+
   int typeCustomerGet;
 
   var currentLocation;
@@ -36,10 +40,16 @@ class _CheckOrderDetailPageState extends State<CheckOrderDetailPage> {
     super.initState();
     Geolocator().getCurrentPosition().then((currloc){
       setState(() {
-        currentLocation = currloc;
-        print('${currentLocation.latitude} --------  ${currentLocation.longitude}');
-        //mapToggle = true;
-        //addMarkerShip();
+        if(widget.billOrderShipVal.shipBillCusLatitude == null){
+          currentLocation = currloc;
+          print('${currentLocation.latitude} --------  ${currentLocation.longitude}');
+          //mapToggle = true;
+          //addMarkerShip();
+        }else{
+          currentLocation.latitude = widget.billOrderShipVal.shipBillCusLatitude;
+          currentLocation.longitude = widget.billOrderShipVal.shipBillCusLongitude;
+        }
+
       });
     });
   }
@@ -141,7 +151,10 @@ class _CheckOrderDetailPageState extends State<CheckOrderDetailPage> {
     File resizeImageFile1 = File(imageFile1.path)
       ..writeAsBytesSync(img.encodeJpg(resizeImage1, quality: 80));*/
 
-    File resizeImageFile1 = await resizeImgFun(imageFile1);
+    //File resizeImageFile1 = await resizeImgFun(imageFile1);
+
+    imageBytes1 = imageFile1.readAsBytesSync();
+    String resizeImageFile1 = base64Encode(imageBytes1);
 
     /*var stream1 = http.ByteStream(
         DelegatingStream.typed(resizeImageFile1.openRead()));
@@ -155,7 +168,10 @@ class _CheckOrderDetailPageState extends State<CheckOrderDetailPage> {
     File resizeImageFile2 = File(imageFile2.path)
       ..writeAsBytesSync(img.encodeJpg(resizeImage2, quality: 80));*/
 
-    File resizeImageFile2 = await resizeImgFun(imageFile2);
+    //File resizeImageFile2 = await resizeImgFun(imageFile2);
+
+    imageBytes2 = imageFile2.readAsBytesSync();
+    String resizeImageFile2 = base64Encode(imageBytes2);
 
     /*var stream2 = http.ByteStream(
         DelegatingStream.typed(resizeImageFile2.openRead()));
@@ -174,22 +190,39 @@ class _CheckOrderDetailPageState extends State<CheckOrderDetailPage> {
     var multipartFile3 = http.MultipartFile(
         "runFile2priceTag", stream3, imgLength3,
         filename: path.basename("resizeImageFile3.jpg"));*/
+    if(currentLocation.latitude != null){
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CustomerSignPage(
+              billOrderShip: val,
+              typeCustomerGet: e,
+              filePic1: resizeImageFile1,
+              filePic2: resizeImageFile2,
+              latitudeVal: currentLocation.latitude,
+              longitudeVal: currentLocation.longitude
+            //filePic3: resizeImageFile3
+          ))).then((r){
+        setState(() {
+          loading = false;
+        });
+      });
+    }else{
+      _showAlertLatitudeVal();
+    }
 
-    Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => CustomerSignPage(
-            billOrderShip: val,
-            typeCustomerGet: e,
-            filePic1: resizeImageFile1,
-            filePic2: resizeImageFile2,
-            latitudeVal: currentLocation.latitude,
-            longitudeVal: currentLocation.longitude
-          //filePic3: resizeImageFile3
-        ))).then((r){
-          setState(() {
-            loading = false;
-          });
-    });
+  }
+
+  _showAlertLatitudeVal() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('แจ้งเตือน'),
+          content: Text('รอรับ ละติจูด และ ลองจิจูด'),
+        );
+      },
+    );
   }
 
   @override
