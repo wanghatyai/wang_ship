@@ -111,23 +111,26 @@ class _ReportPageState extends State<ReportPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
-          slivers: <Widget>[
-            SliverList(
-              delegate: SliverChildListDelegate([
-                Container(
-                  color: Colors.purple,
-                  child: Center(
-                    child: orderBillLastShipFinis.isEmpty ? Text('') : Text('ร้านที่ส่งล่าสุด : [${orderBillLastShipFinis[0].shipBillCusCode}] ${orderBillLastShipFinis[0].shipBillCusName}', style: TextStyle(fontSize: 16, color: Colors.white), ),
-                  ),
+        slivers: <Widget>[
+          SliverList(
+            delegate: SliverChildListDelegate([
+              Container(
+                color: Colors.purple,
+                child: Center(
+                  child: orderBillLastShipFinis.isEmpty ? Text('') : Text('ร้านที่ส่งล่าสุด : [${orderBillLastShipFinis[0].shipBillCusCode}] ${orderBillLastShipFinis[0].shipBillCusName}', style: TextStyle(fontSize: 16, color: Colors.white), ),
                 ),
-                Container(
-                  color: Colors.purple,
-                  child: Center(
-                    child: orderBillLastShipFinis.isEmpty ? Text('') : Text('เวลา : ${orderBillLastShipFinis[0].shipBillDateShipFinis}', style: TextStyle(fontSize: 16, color: Colors.white), ),
-                  ),
+              ),
+              Container(
+                color: Colors.purple,
+                child: Center(
+                  child: orderBillLastShipFinis.isEmpty ?
+                    Text('') : orderBillLastShipFinis[0].shipBillPeriod.isEmpty ?
+                      Text('เวลา : ${orderBillLastShipFinis[0].shipBillDateShipFinis}', style: TextStyle(fontSize: 16, color: Colors.white)) :
+                      Text('รอบที่ : ${orderBillLastShipFinis[0].shipBillPeriod.substring(10)} เวลา : ${orderBillLastShipFinis[0].shipBillDateShipFinis}', style: TextStyle(fontSize: 16, color: Colors.white), ),
                 ),
-                isLoading ? CircularProgressIndicator()
-                    :ListView.builder(
+              ),
+              isLoading ? CircularProgressIndicator()
+                :ListView.builder(
                   shrinkWrap: true,
                   physics: ClampingScrollPhysics(),
                   controller: _scrollController,
@@ -136,8 +139,8 @@ class _ReportPageState extends State<ReportPage> {
                       contentPadding: EdgeInsets.fromLTRB(10, 1, 10, 1),
                       onTap: (){
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => ReportDetailPage(billOrderShipVal: orderBillAll[index])));
+                        context,
+                        MaterialPageRoute(builder: (context) => ReportDetailPage(billOrderShipVal: orderBillAll[index])));
                       },
                       leading: Text('${orderBillAll[index].shipBillQty} ลัง', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                       title: Text('[${orderBillAll[index].shipBillCusCode}] ${orderBillAll[index].shipBillCusName}', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
@@ -150,18 +153,18 @@ class _ReportPageState extends State<ReportPage> {
                         ],
                       ),
                       trailing: IconButton(
-                          icon: Icon(Icons.local_shipping, size: 40, color: Colors.lightBlue,),
-                          onPressed: (){
-                            //addToOrderFast(productAll[index]);
-                          }
+                        icon: Icon(Icons.local_shipping, size: 40, color: Colors.lightBlue,),
+                        onPressed: (){
+                        //addToOrderFast(productAll[index]);
+                        }
                       ),
                     );
                   },
                   itemCount: orderBillAll != null ? orderBillAll.length : 0,
                 ),
-              ]),
-            ),
-          ]),
+            ]),
+          ),
+      ]),
     );
   }
 }
