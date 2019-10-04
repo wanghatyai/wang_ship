@@ -6,6 +6,7 @@ import 'package:wang_ship/check_order.dart';
 import 'package:wang_ship/report.dart';
 
 import 'package:wang_ship/report_all.dart';
+import 'package:wang_ship/report_border_all.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,7 +27,7 @@ class _HomeState extends State<Home> {
   var username;
 
   int currentIndex = 0;
-  List pages = [CheckOrderPage(), ReportPage(), ReportAllPage()];
+  List pages = [CheckOrderPage(), ReportPage(), ReportAllPage(), ReportBorderAllPage()];
 
   getCodeEmpShip() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -65,11 +66,15 @@ class _HomeState extends State<Home> {
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.account_box),
-              title: Text('รายงานส่วนตัว', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
+              title: Text('ส่วนตัว', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.view_list),
-              title: Text('รายงานทั้งหมด', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
+              title: Text('หาดใหญ่', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.map),
+              title: Text('ต่างจังหวัด', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
           ),
         ]
     );
