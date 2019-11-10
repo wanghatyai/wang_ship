@@ -29,7 +29,7 @@ class _CheckOrderDetailPageState extends State<CheckOrderDetailPage> {
   List<int> imageBytes1;
   List<int> imageBytes2;
 
-  int typeCustomerGet;
+  int typeCustomerGet = 1;
 
   var currentLocation;
 
