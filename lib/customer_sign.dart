@@ -90,26 +90,40 @@ class _CustomerSignPageState extends State<CustomerSignPage> {
       ),*/
       body: Signature(key: signatureKey),
       persistentFooterButtons: <Widget>[
-        FlatButton(
-          child: Text('ลบ', style: TextStyle(fontSize: 20, color: Colors.red, fontWeight: FontWeight.bold), ),
-          onPressed: () {
-            signatureKey.currentState.clearPoints();
-          },
-        ),
         Container(
-          width: 230,
-          child: Text("${widget.billOrderShip.shipBillCusName} : ${widget.billOrderShip.shipBillQty} ลัง",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
-        ),
-
-        FlatButton(
-          child: Text('บันทึก', style: TextStyle(fontSize: 20, color: Colors.green, fontWeight: FontWeight.bold), ),
-          onPressed: () {
-            // Future will resolve later
-            // so setState @image here and access in #showImage
-            // to avoid @null Checks
-            setRenderedImage(context);
-          },
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          width: MediaQuery.of(context).size.width * 0.9,
+          height: 80,
+          child: Column(
+            //mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                child: Text("${widget.billOrderShip.shipBillQty} ลัง : ${widget.billOrderShip.shipBillCusName}",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  FlatButton(
+                    child: Text('ลบ', style: TextStyle(fontSize: 20, color: Colors.red, fontWeight: FontWeight.bold), ),
+                    onPressed: () {
+                      signatureKey.currentState.clearPoints();
+                    },
+                  ),
+                  FlatButton(
+                    child: Text('บันทึก', style: TextStyle(fontSize: 20, color: Colors.green, fontWeight: FontWeight.bold), ),
+                    onPressed: () {
+                      // Future will resolve later
+                      // so setState @image here and access in #showImage
+                      // to avoid @null Checks
+                      setRenderedImage(context);
+                    },
+                  )
+                ],
+              ),
+            ],
+          ),
         )
       ],
     );
@@ -300,6 +314,10 @@ class SignatureState extends State<Signature> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      /*appBar: AppBar(
+        backgroundColor: Colors.deepOrange,
+        title: Text("ลงลายมือรับสินค้า"),
+      ),*/
       body: Container(
         child: GestureDetector(
           onPanUpdate: (DragUpdateDetails details) {
@@ -345,7 +363,7 @@ class SignaturePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
-      ..color = Colors.deepOrange
+      ..color = Colors.black
       ..strokeCap = StrokeCap.square
       ..strokeWidth = 5.0;
 
