@@ -363,7 +363,7 @@ class SignaturePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     var paint = Paint()
-      ..color = Colors.black
+      ..color = Colors.blue
       ..strokeCap = StrokeCap.square
       ..strokeWidth = 5.0;
 
