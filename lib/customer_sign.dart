@@ -220,7 +220,7 @@ class _CustomerSignPageState extends State<CustomerSignPage> {
 
       showToastAddFast();
       //Navigator.of(context).pop();
-      Navigator.pushReplacementNamed(context, '/Home');
+      Navigator.of(context).pushNamedAndRemoveUntil('/Home', (Route<dynamic> route) => false);
 
     }
 

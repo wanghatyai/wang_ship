@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
 
 import 'package:wang_ship/check_order.dart';
 import 'package:wang_ship/report.dart';
@@ -155,6 +156,42 @@ class _HomeState extends State<Home> {
     getOrderBorderSumFinish();
   }
 
+  _clearSharedPrefer() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.clear();
+  }
+
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("แจ้งเตือน"),
+          content: new Text("ยืนยันออกจากระบบ"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            FlatButton(
+              child: new Text("Ok"),
+              onPressed: () {
+                _clearSharedPrefer();
+                SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                //Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -213,7 +250,13 @@ class _HomeState extends State<Home> {
           ],
         ),
         actions: <Widget>[
-
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            color: Colors.black,
+            onPressed: (){
+              _showDialog();
+            },
+          )
         ],
       ),
       body: pages[currentIndex],

@@ -43,11 +43,14 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController ctrlUser = TextEditingController();
   TextEditingController ctrlPass = TextEditingController();
 
+  var username;
+
   var Useralert = 'Please enter the Username / กรุณากรอกชื่อบัญชีผู้';
   var Passalert = 'Please enter the Password / กรุณากรอกรหัสผ่านบัญชีผู้ใช้';
 
   var userInvalid = false;
   var passInvalid = false;
+
 
   void _showAlert() async {
     return showDialog<void>(
@@ -61,6 +64,26 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
   }
+
+  _checkPrefer() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString("empCodeShipping");
+    });
+
+    if(username != null){
+      Navigator.pushReplacementNamed(context, '/Home');
+    }
+
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _checkPrefer();
+  }
+
 
   _doLogin() async{
 
