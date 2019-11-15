@@ -140,7 +140,7 @@ class _CheckOrderPageState extends State<CheckOrderPage> {
               onTap: (){
                 getOrderBillDetail(a);
               },
-              leading: Text('${a.shipBillQty} ลัง', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              leading: Text('${a.shipBillQtySum} ลัง', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
               title: Text('[${a.shipBillCusCode}] ${a.shipBillCusName}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
