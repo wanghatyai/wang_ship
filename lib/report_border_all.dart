@@ -3,9 +3,11 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:wang_ship/bill_model.dart';
+import 'package:wang_ship/route_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:wang_ship/report_detail.dart';
+import 'package:wang_ship/route_model.dart' as prefix0;
 
 class ReportBorderAllPage extends StatefulWidget {
   @override
@@ -21,6 +23,9 @@ class _ReportBorderAllPageState extends State<ReportBorderAllPage> {
   int perPage = 30;
   String act = "GetShipBorderAll";
   String username;
+
+  List <RouteShip> routeShipAll = [];
+  String _currentRoute;
 
   List shipType = ['_','บริการส่ง','ฝากรถ','รับเองที่คลัง','รับเองที่หจก','พร้อมรถ'];
 
@@ -45,6 +50,30 @@ class _ReportBorderAllPageState extends State<ReportBorderAllPage> {
         print(perPage);
 
         return orderBillBorderAll;
+
+      });
+
+
+    }else{
+      throw Exception('Failed load Json');
+    }
+  }
+
+  getRouteShip() async{
+
+    final res = await http.get('https://wangpharma.com/API/routeShipping.php?act=Route');
+
+    if(res.statusCode == 200){
+
+      setState(() {
+        //isLoading = false;
+
+        var jsonData = json.decode(res.body);
+
+        jsonData.forEach((routeShip) => routeShipAll.add(RouteShip.fromJson(routeShip)));
+
+        print(routeShipAll);
+        return routeShipAll;
 
       });
 
