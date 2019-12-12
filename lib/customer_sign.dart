@@ -99,7 +99,7 @@ class _CustomerSignPageState extends State<CustomerSignPage> {
             children: <Widget>[
               Container(
                 width: MediaQuery.of(context).size.width * 0.9,
-                child: Text("${widget.billOrderShip.shipBillQty} ลัง : ${widget.billOrderShip.shipBillCusName}",
+                child: Text("${widget.billOrderShip.shipBillQtySum} ลัง : ${widget.billOrderShip.shipBillCusName}",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
               ),
               Row(

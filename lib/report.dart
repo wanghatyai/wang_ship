@@ -142,7 +142,7 @@ class _ReportPageState extends State<ReportPage> {
                         context,
                         MaterialPageRoute(builder: (context) => ReportDetailPage(billOrderShipVal: orderBillAll[index])));
                       },
-                      leading: Text('${orderBillAll[index].shipBillQty} ลัง', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                      leading: Text('${orderBillAll[index].shipBillQtySum} ลัง', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                       title: Text('[${orderBillAll[index].shipBillCusCode}] ${orderBillAll[index].shipBillCusName}', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
