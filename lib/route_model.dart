@@ -11,9 +11,9 @@ class RouteShip{
 
   factory RouteShip.fromJson(Map<String, dynamic> json){
     return new RouteShip(
-      routeId: json['id'],
-      routeCode: json['sIdBill'],
-      routeName: json['sIdBill_2'],
+      routeId: json['r_id'],
+      routeCode: json['r_code'],
+      routeName: json['r_name'],
     );
   }
 
